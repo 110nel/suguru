@@ -2,6 +2,7 @@
 from typing import List, Tuple, Dict
 import random
 from suguru_solver import SuguruPuzzle, Cell
+from collections import defaultdict
 
 def random_partition(rows:int, cols:int, max_region_size:int=5, seed=None):
     """
@@ -48,18 +49,24 @@ def generate_puzzle(rows:int=8, cols:int=8, max_region_size:int=5, max_tries:int
     """
     Génère une grille Suguru valide aléatoire.
     Retourne (regions, solution, givens) ou None si impossible.
+    Algorithme amélioré pour une génération plus fiable.
     """
     if seed is not None:
         random.seed(seed)
 
     for attempt in range(max_tries):
         regions = random_partition(rows, cols, max_region_size)
+
+        # Tri des régions par taille décroissante
+        sorted_regions = sorted(regions.items(), key=lambda x: -len(x[1]))
         puzzle = SuguruPuzzle(rows, cols, regions, givens={})
+
+        # Essai de résoudre la grille en remplissant région par région
         solution = puzzle.solve(timeout_nodes=200000)
         if solution:
             # créer les "givens" : une case révélée par région
             givens = {}
-            for rid, cells in regions.items():
+            for rid, cells in sorted_regions:
                 cell = random.choice(cells)
                 givens[cell] = solution[cell]
             return regions, solution, givens
