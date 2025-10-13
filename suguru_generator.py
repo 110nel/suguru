@@ -44,26 +44,31 @@ def random_partition(rows:int, cols:int, max_region_size:int=5, seed=None):
         rid += 1
     return regions
 
-def generate_puzzle(rows:int=8, cols:int=8, max_region_size:int=5, max_tries:int=100, seed=None):
+def generate_puzzle(rows:int=8, cols:int=8, max_region_size:int=5, max_tries:int=1000, seed=None):
     """
-    Try generate a partition and find a full valid filling (solution).
-    Then reveal hints: one revealed cell per region (random).
-    Returns (regions, solution, givens) or raises RuntimeError
+    Génère une grille Suguru valide aléatoire.
+    Retourne (regions, solution, givens).
+    En cas d'échec, retourne None au lieu de lever une exception.
     """
     if seed is not None:
         random.seed(seed)
+
     for attempt in range(max_tries):
         regions = random_partition(rows, cols, max_region_size)
         puzzle = SuguruPuzzle(rows, cols, regions, givens={})
         solution = puzzle.solve(timeout_nodes=200000)
         if solution:
-            # create givens: reveal one cell per region randomly
+            # créer les "givens" : une case révélée par région
             givens = {}
             for rid, cells in regions.items():
                 cell = random.choice(cells)
                 givens[cell] = solution[cell]
             return regions, solution, givens
-    raise RuntimeError("Failed to generate puzzle after {} tries".format(max_tries))
+
+    # si aucune grille valide n’a été générée après max_tries
+    print(f"[Warning] Failed to generate puzzle after {max_tries} tries.")
+    return None
+
 
 # small CLI test
 if __name__ == "__main__":

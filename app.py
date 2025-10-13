@@ -112,15 +112,15 @@ if uploaded is not None:
 # generate
 if gen_btn:
     s = int(seed) if seed.strip().isdigit() else None
-    try:
-        regions, solution, givens = make_puzzle(rows, cols, max_region, s)
-    except Exception as e:
-        st.error(f"Erreur génération: {e}")
-        regions, solution, givens = None, None, None
-    st.session_state.regions = regions
-    st.session_state.solution = None
-    st.session_state.user = dict(givens)
-    st.session_state.givens = givens
+    result = make_puzzle(rows, cols, max_region, s)
+    if result is not None:
+        regions, solution, givens = result
+        st.session_state.regions = regions
+        st.session_state.solution = None
+        st.session_state.user = dict(givens)
+        st.session_state.givens = givens
+    else:
+        st.error("Impossible de générer une grille valide. Réessaie.")
 
 # ensure puzzle exists
 if st.session_state.get("regions") is None:
