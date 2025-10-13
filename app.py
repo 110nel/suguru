@@ -8,8 +8,12 @@ st.set_page_config(page_title="Suguru (Tectonic) - Jouable", layout="wide")
 
 @st.cache_data
 def make_puzzle(rows, cols, max_region_size, seed=None):
-    regions, solution, givens = generate_puzzle(rows, cols, max_region_size, seed=seed)
-    return regions, solution, givens
+    result = generate_puzzle(rows, cols, max_region_size, seed=seed)
+    if result is None:
+        st.error("Impossible de générer une grille valide. Réessaie.")
+        return None
+    return result
+
 
 def init_session(rows, cols):
     if "puzzle" not in st.session_state:
@@ -119,6 +123,7 @@ if gen_btn:
         st.session_state.solution = None
         st.session_state.user = dict(givens)
         st.session_state.givens = givens
+        st.success("Grille générée avec succès !")
     else:
         st.error("Impossible de générer une grille valide. Réessaie.")
 

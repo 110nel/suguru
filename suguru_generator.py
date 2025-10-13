@@ -47,8 +47,7 @@ def random_partition(rows:int, cols:int, max_region_size:int=5, seed=None):
 def generate_puzzle(rows:int=8, cols:int=8, max_region_size:int=5, max_tries:int=1000, seed=None):
     """
     Génère une grille Suguru valide aléatoire.
-    Retourne (regions, solution, givens).
-    En cas d'échec, retourne None au lieu de lever une exception.
+    Retourne (regions, solution, givens) ou None si impossible.
     """
     if seed is not None:
         random.seed(seed)
@@ -65,7 +64,7 @@ def generate_puzzle(rows:int=8, cols:int=8, max_region_size:int=5, max_tries:int
                 givens[cell] = solution[cell]
             return regions, solution, givens
 
-    # si aucune grille valide n’a été générée après max_tries
+    # Si aucune grille valide n’a été générée
     print(f"[Warning] Failed to generate puzzle after {max_tries} tries.")
     return None
 
