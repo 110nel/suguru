@@ -12,7 +12,7 @@ st.set_page_config(page_title="Suguru", page_icon="🧩", layout="centered")
 # ==============================
 # ⚙️ PARAMÈTRES
 # ==============================
-rows, cols = 8, 8
+rows, cols = 5, 5
 max_region = 5
 
 # ==============================
