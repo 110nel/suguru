@@ -88,7 +88,7 @@ def random_partition(rows, cols, max_region_size):
         region_id += 1
     return regions
 
-def generate_puzzle(rows:int=8, cols:int=8, max_region_size:int=5, max_tries:int=100, seed=None):
+def generate_puzzle(rows:int=8, cols:int=8, max_region_size:int=5, max_tries:int=10000, seed=None):
     """
     Génère une grille Suguru valide en utilisant backtracking robuste.
     Retourne (regions, solution, givens) ou None si impossible.
